@@ -1,8 +1,106 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>内容管理</title>
+    <!-- 引入必要的样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/naive-ui/dist/index.css">
 </head>
 <body>
- <h1>你好</h1>
+    <div>
+        <div class="n-card mt-2 proCard">
+            <div class="basic-table">
+                <!-- 表格标题 -->
+                <div class="table-title">
+                    <div class="n-space" style="display: inline-flex; align-items: center;">
+                        <label>内容类型</label>
+                        <select id="contentType" onchange="reloadTable()">
+                            <option value="">内容类型</option>
+                            <option value="平台服务协议">平台服务协议</option>
+                            <option value="平台隐私协议">平台隐私协议</option>
+                            <option value="宣教资料">宣教资料</option>
+                            <option value="操作手册">操作手册</option>
+                        </select>
+                        <label>内容标题</label>
+                        <input type="text" id="contentTitle" placeholder="内容标题" oninput="reloadTable()">
+                        <button onclick="reloadTable()">查询</button>
+                        <button onclick="resetParams()">重置</button>
+                        <button onclick="handleAdd()">新增</button>
+                    </div>
+                </div>
+                <!-- 表格内容 -->
+                <table>
+                    <thead>
+                        <tr>
+                            <th>标题</th>
+                            <th>类型</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- 动态生成的表格行 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 抽屉 -->
+        <div id="drawer" style="display: none;">
+            <div class="drawer-content">
+                <form id="contentForm">
+                    <label>标题</label>
+                    <input type="text" id="formTitle" placeholder="请输入标题">
+                    <label>渠道编码</label>
+                    <select id="formAppCode">
+                        <option value="APP_001">APP_001</option>
+                        <!-- 其他选项 -->
+                    </select>
+                    <!-- 其他表单项 -->
+                    <button type="button" onclick="saveBtn()">确定</button>
+                    <button type="button" onclick="closeDrawer()">取消</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript逻辑
+        const staticData = [
+            { id: 1, title: '平台服务协议 - 胃肠外科', type: '平台服务协议' },
+            // 其他数据
+        ];
+
+        function reloadTable() {
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = ''; // 清空表格
+            staticData.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${item.title}</td><td>${item.type}</td><td><button onclick="editRecord(${item.id})">编辑</button><button onclick="deleteRecord(${item.id})">删除</button></td>`;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function resetParams() {
+            document.getElementById('contentType').value = '';
+            document.getElementById('contentTitle').value = '';
+            reloadTable();
+        }
+
+        function handleAdd() {
+            document.getElementById('drawer').style.display = 'block';
+        }
+
+        function closeDrawer() {
+            document.getElementById('drawer').style.display = 'none';
+        }
+
+        function saveBtn() {
+            // 保存逻辑
+            closeDrawer();
+        }
+
+        reloadTable(); // 初始化表格
+    </script>
 </body>
 </html>
